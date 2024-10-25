@@ -11,9 +11,6 @@
     <Content Remove="C:\Users\OPOSTLET\.nuget\packages\system.diagnostics.diagnosticsource\9.0.0-rc.2.24473.5\contentFiles\any\net8.0\ILLink\ILLink.Descriptors.LibraryBuild.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="cipher-api-test-3624f3fca215.json" />
-  </ItemGroup>
-  <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Google.Analytics.Data.V1Beta" Version="2.0.0-beta08" />
     <PackageReference Include="Google.Api.CommonProtos" Version="2.16.0" />
