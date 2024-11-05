@@ -70,7 +70,7 @@ namespace appsvc_function_dev_cm_stats_dotnet001
         /// Get all reports configured in App.config
         /// </summary>
         /// <returns></returns>
-        public void GenerateReport(string propertyId, ILogger logger)
+        public async Task GenerateReport(string propertyId, ILogger logger)
         {
             var reportResponse = new RunReportResponse();
             try
@@ -97,9 +97,12 @@ namespace appsvc_function_dev_cm_stats_dotnet001
                         stopwatch.Start();
                         reportResponse = analyticsDataClient.RunReport(reportRequest);
                         stopwatch.Stop();
+                        
                         logger.LogInformation("Finished fetching report: " + report.Name);
                         logger.LogInformation(string.Format("Time elapsed: {0:hh\\:mm\\:ss}", stopwatch.Elapsed));
-                        new ReportingService().SaveReportToDisk(report.Name, propertyId, reportResponse);
+
+                        //new ReportingService().SaveReportToDisk(report.Name, propertyId, reportResponse, logger);
+                        await new ReportingService().SaveReportToStorageContainerAsync(report.Name, propertyId, reportResponse, logger);
                     }
                 }
             }
@@ -108,6 +111,5 @@ namespace appsvc_function_dev_cm_stats_dotnet001
                 logger.LogError("Error in fetching reports: " + ex);
             }
         }
-
     }
 }

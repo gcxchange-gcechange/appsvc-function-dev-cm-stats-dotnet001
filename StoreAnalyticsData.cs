@@ -16,14 +16,14 @@ namespace appsvc_function_dev_cm_stats_dotnet001
         }
 
         [Function("StoreAnalyticsData")]
-        public IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
         {
             _logger.LogInformation("StoreAnalyticsData received a request.");
 
             try
             {
                 var propertyId = ConfigurationManager.AppSettings["PropertyId"].Trim();
-                new ReportingApi().GenerateReport(propertyId, _logger);
+                await new ReportingApi().GenerateReport(propertyId, _logger);
             }
             catch (Exception ex)
             {
