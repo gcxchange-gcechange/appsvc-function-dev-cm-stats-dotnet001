@@ -16,7 +16,8 @@ namespace appsvc_function_dev_cm_stats_dotnet001
         }
 
         [Function("StoreAnalyticsData")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequest req)
+        //public async Task Run([TimerTrigger("0 6 * * *")] TimerInfo myTimer)
         {
             _logger.LogInformation("StoreAnalyticsData received a request.");
 
