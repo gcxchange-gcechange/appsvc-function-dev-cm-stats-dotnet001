@@ -21,6 +21,7 @@ namespace appsvc_function_dev_cm_stats_dotnet001.Configuration
                 return this["metrics"] as string;
             }
         }
+
         [ConfigurationProperty("dimensions", IsRequired = true)]
         public string Dimensions
         {
@@ -29,5 +30,17 @@ namespace appsvc_function_dev_cm_stats_dotnet001.Configuration
                 return this["dimensions"] as string;
             }
         }
+
+
+        [ConfigurationProperty("filter", IsRequired = true)]
+        public string Filter
+        {
+            get
+            {
+                return this["filter"] as string;
+            }
+        }
+
+
     }
 }

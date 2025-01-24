@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
+using log4net.Filter;
 
 namespace appsvc_function_dev_cm_stats_dotnet001
 {
@@ -19,9 +20,13 @@ namespace appsvc_function_dev_cm_stats_dotnet001
         /// <returns>AnalyticsReportingService</returns>   
         private BetaAnalyticsDataClient GetAnalyticsClient()
         {
+
+            string currentDirectory = Directory.GetCurrentDirectory();
+            string filePath = string.Concat(currentDirectory, "\\cipher-api-test-73b24f3195a9.json");
+
             return new BetaAnalyticsDataClientBuilder
             {
-                CredentialsPath = ConfigurationManager.AppSettings["KeyFileName"]
+                CredentialsPath = filePath
             }.Build();
         }
         public ReportingApi()
@@ -58,6 +63,12 @@ namespace appsvc_function_dev_cm_stats_dotnet001
                 endDate = reportEndDate;
             }
 
+            // endDate hard-coded to current date for now
+
+            endDate = DateTime.Now;
+
+
+
             return new DateRange
             {
                 StartDate = startDate.ToString("yyyy-MM-dd"),
@@ -87,13 +98,33 @@ namespace appsvc_function_dev_cm_stats_dotnet001
                         // Create the Metrics and dimensions object based on configuration.
                         var metrics = new RepeatedField<Metric> { report.Metrics.Split(',').Select(m => new Metric { Name = m }) };
                         var dimensions = new RepeatedField<Dimension> { report.Dimensions.Split(',').Select(d => new Dimension { Name = d }) };
+
+                        var filter = new FilterExpression();
+                        Filter.Types.StringFilter stringFilter = new Filter.Types.StringFilter();
+
+                        stringFilter.Value = report.Filter;
+                        filter.Filter = new Filter { FieldName = "eventName", StringFilter = stringFilter };
+
+                        DateRange homeHomeOnTheRange = GetDateRangeFromConfiguration(config);
+
+                        logger.LogInformation($"homeHomeOnTheRange.StartDate: {homeHomeOnTheRange.StartDate}");
+                        logger.LogInformation($"homeHomeOnTheRange.EndDate: {homeHomeOnTheRange.EndDate}");
+
                         var reportRequest = new RunReportRequest
                         {
                             Property = "properties/" + propertyId,
                             DateRanges = { GetDateRangeFromConfiguration(config) },
                             Metrics = { metrics },
-                            Dimensions = { dimensions }
+                            Dimensions = { dimensions },
+                            DimensionFilter = filter
                         };
+
+
+                        
+
+
+
+
                         stopwatch.Start();
                         reportResponse = analyticsDataClient.RunReport(reportRequest);
                         stopwatch.Stop();
