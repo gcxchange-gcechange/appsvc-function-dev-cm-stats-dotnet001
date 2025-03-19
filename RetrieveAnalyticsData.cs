@@ -6,8 +6,8 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Azure.Storage.Blobs;
 using Newtonsoft.Json.Linq;
-using SysConfig = System.Configuration;
 using System.Globalization;
+using static appsvc_function_dev_cm_stats_dotnet001.Common;
 
 namespace appsvc_function_dev_cm_stats_dotnet001
 {
@@ -48,17 +48,13 @@ namespace appsvc_function_dev_cm_stats_dotnet001
 
         private IActionResult GetEventReport(string reportName, DateTime reportDate, ExecutionContext context)
         {
-            var config = new ConfigurationBuilder().AddJsonFile("appsettings.json", true, true).AddEnvironmentVariables().Build();
-            string connectionString = config["AzureWebJobsStorage"];
-            string containerName = config["containerName"];
-
-            string fileName = $"GA4Report_{reportName}_{SysConfig.ConfigurationManager.AppSettings["PropertyId"].Trim()}_{reportDate.ToString("yyyy-MM-dd", CultureInfo.CurrentCulture)}.json";
-
+            Config config = new Config();
+            string fileName = GetFileName(reportName);
             _logger.LogInformation($"fileName = {fileName}");
 
             try
             {
-                var Getdata = GetBlob(connectionString, containerName, fileName, context);
+                var Getdata = GetBlob(config.AzureWebJobsStorage, config.ContainerName, fileName, context);
                 var obj = JsonConvert.DeserializeObject<dynamic>(Getdata);
 
                 _ClickEvents = ((JArray)obj).ToObject<List<Event>>();

@@ -20,6 +20,7 @@ MSGraph
 
 | API / Permissions name    | Type        | Admin consent | Justification                       |
 | ------------------------- | ----------- | ------------- | ----------------------------------- |
+| Sites.Read.All            | Delegasted  | Yes           | Read opportunity list               |   
 | User.Read                 | Delegated   | Yes           | Sign in and read user profile       | 
 
 Sharepoint
@@ -31,7 +32,17 @@ n/a
 | Name                    | Description                                                                    |
 | ----------------------- | ------------------------------------------------------------------------------ |
 | AzureWebJobsStorage     | Connection string for the storage acoount                                      |
+| clientId                | Id of the app registration used to authenticate user                           |
 | containerName           | The name of the storage container that contains the GA data                    |
+| delegatedUserName       | Name of the user for delegated access                                          |
+| delegatedUserSecret     | Name of the secret for delegated access                                        |
+| keyFileName             | Name of the file that contains Google Analytics credentials                    |
+| keyVaultUrl             | Address of the key vault                                                       |
+| listId                  | Id of the job opportunity list                                                 |
+| propertyId              | Id of the Google Analytics property                                            |
+| secretName              | Name of the secret used for authentication                                     |
+| siteId                  | Id of the site that hosts the job opportunity list                             |
+| tenantId                | Id of the SharePoint tenant                                                    |
 
 ## Version history
 

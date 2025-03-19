@@ -1,12 +1,9 @@
 ﻿using appsvc_function_dev_cm_stats_dotnet001.Configuration;
 using Google.Analytics.Data.V1Beta;
 using Google.Protobuf.Collections;
-//using Grpc.Core.Logging;
-using System.Configuration;
 using System.Diagnostics;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
-using log4net.Filter;
 
 namespace appsvc_function_dev_cm_stats_dotnet001
 {
@@ -20,9 +17,10 @@ namespace appsvc_function_dev_cm_stats_dotnet001
         /// <returns>AnalyticsReportingService</returns>   
         private BetaAnalyticsDataClient GetAnalyticsClient()
         {
+            Config config = new Config();
 
             string currentDirectory = Directory.GetCurrentDirectory();
-            string filePath = string.Concat(currentDirectory, "\\cipher-api-test-73b24f3195a9.json");
+            string filePath = string.Concat(currentDirectory, "\\", config.KeyFileName);
 
             return new BetaAnalyticsDataClientBuilder
             {
@@ -56,25 +54,27 @@ namespace appsvc_function_dev_cm_stats_dotnet001
             var endDate = numberOfDays == 0 ? DateTime.Now : DateTime.Now.AddDays(-1);
 
             //Use start and end date from config if specified else keep the existing values
-            if (reportStartDate != DateTime.MinValue && reportEndDate != DateTime.MinValue &&
-                reportStartDate <= reportEndDate)
-            {
+
+            //if (reportStartDate != DateTime.MinValue && reportEndDate != DateTime.MinValue && reportStartDate <= reportEndDate)
+            //{
+            //    startDate = reportStartDate;
+            //    endDate = reportEndDate;
+            //}
+
+            if (reportStartDate != DateTime.MinValue)
                 startDate = reportStartDate;
+
+            if (reportEndDate != DateTime.MinValue)
                 endDate = reportEndDate;
-            }
 
             // endDate hard-coded to current date for now
-
             endDate = DateTime.Now;
-
-
 
             return new DateRange
             {
                 StartDate = startDate.ToString("yyyy-MM-dd"),
                 EndDate = endDate.ToString("yyyy-MM-dd")
             };
-
         }
 
         /// <summary>

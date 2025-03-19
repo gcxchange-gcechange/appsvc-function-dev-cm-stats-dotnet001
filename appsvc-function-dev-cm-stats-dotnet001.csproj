@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.7.0" />
     <PackageReference Include="Google.Analytics.Data.V1Beta" Version="2.0.0-beta08" />
     <PackageReference Include="Google.Api.CommonProtos" Version="2.16.0" />
     <PackageReference Include="Google.Api.Gax" Version="4.9.0" />
@@ -37,6 +38,7 @@
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.0-rc.2.24473.5" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0-rc.2.24473.5" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0-rc.2.24473.5" />
+    <PackageReference Include="Microsoft.Graph" Version="5.69.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Buffers" Version="4.5.1" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.0-rc.2.24473.5" />
@@ -51,7 +53,10 @@
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="cipher-api-test-73b24f3195a9.json">
+    <None Update="key.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="key-uat.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="host.json">

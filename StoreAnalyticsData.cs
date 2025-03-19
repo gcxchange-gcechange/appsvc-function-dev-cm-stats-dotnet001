@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System.Configuration;
 
 namespace appsvc_function_dev_cm_stats_dotnet001
 {
@@ -16,24 +16,25 @@ namespace appsvc_function_dev_cm_stats_dotnet001
         }
 
         [Function("StoreAnalyticsData")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequest req)
-        //public async Task Run([TimerTrigger("0 6 * * *")] TimerInfo myTimer)
+        //public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequest req)
+        public async Task Run([TimerTrigger("0 6 * * *")] TimerInfo myTimer)
         {
             _logger.LogInformation("StoreAnalyticsData received a request.");
 
             try
             {
-                var propertyId = ConfigurationManager.AppSettings["PropertyId"].Trim();
-                await new ReportingApi().GenerateReport(propertyId, _logger);
+                Config config = new Config();
+                await new ReportingApi().GenerateReport(config.PropertyId, _logger);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
             }
 
+
             _logger.LogInformation("StoreAnalyticsData processed a request.");
 
-            return new OkResult();
+            //return new OkResult();
         }
     }
 }
