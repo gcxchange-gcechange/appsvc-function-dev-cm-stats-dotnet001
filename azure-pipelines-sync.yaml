@@ -10,7 +10,7 @@ steps:
 - script: |
     echo Sync azure repo
     B64_PAT=$(echo -n ":$PAT" | base64)
-    git clone --bare https://$PAT@dev.azure.com/tbs-sct/GCExchange/_git/$REPO_NAME Sync_director
+    git clone --bare https://$PAT@dev.azure.com/tbs-sct/GCExchange/_git/$REPO_NAME Sync_directory
     cd Sync_directory
     git remote add --mirror=fetch upstream https://github.com/gcxchange-gcechange/$REPO_NAME
     git fetch upstream --tags
