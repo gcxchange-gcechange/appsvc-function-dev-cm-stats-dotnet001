@@ -111,16 +111,8 @@ namespace appsvc_function_dev_cm_stats_dotnet001
                     ClickEvents = ((JArray)obj.Rows).ToObject<List<Event>>();
                     logger.LogWarning($"_ClickEvents.Count = {ClickEvents.Count}");
 
-
-
-
-
-
-
                     //json = JsonConvert.SerializeObject(ClickEvents, Formatting.Indented, new JsonSerializerSettings { ContractResolver = new IgnorePropertiesResolver("DimensionValues", "MetricValues") });
-                    
                     json = GetEventDetails(ClickEvents, logger).Result;
-
 
                     await SaveToBlob(json, config.AzureWebJobsStorage, config.ContainerName, GetFileName(reportName), logger);
 
@@ -209,7 +201,7 @@ namespace appsvc_function_dev_cm_stats_dotnet001
                     var item = await client.Sites[config.SiteId].Lists[config.ListId].Items[k.Key].GetAsync((requestConfiguration) =>
                     {
                         requestConfiguration.Headers.Add("ConsistencyLevel", "eventual");
-                        requestConfiguration.QueryParameters.Expand = new string[] { "fields($select=JobTitleEn,JobTitleFr,Skills,Skills_x003a_NameFr)" };
+                        requestConfiguration.QueryParameters.Expand = new string[] { "fields($select=JobTitleEn,JobTitleFr,Skills,Skills_x003a__x0020_NameFr)" };
                     });
 
                     FoundCount += 1;
@@ -233,7 +225,7 @@ namespace appsvc_function_dev_cm_stats_dotnet001
                         topTen.SkillsEn.Add(lookup.LookupValue.ToString());
                     }
 
-                    skills = (UntypedArray)item.Fields.AdditionalData["Skills_x003a_NameFr"];
+                    skills = (UntypedArray)item.Fields.AdditionalData["Skills_x003a__x0020_NameFr"];
                     skillsArray = skills.GetValue().ToArray();
                     Skills = new();
 

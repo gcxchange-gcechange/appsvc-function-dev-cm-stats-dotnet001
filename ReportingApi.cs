@@ -102,6 +102,8 @@ namespace appsvc_function_dev_cm_stats_dotnet001
                         var filter = new FilterExpression();
                         Filter.Types.StringFilter stringFilter = new Filter.Types.StringFilter();
 
+                        logger.LogInformation($"report.Filter: {report.Filter}");
+
                         stringFilter.Value = report.Filter;
                         filter.Filter = new Filter { FieldName = "eventName", StringFilter = stringFilter };
 
@@ -118,12 +120,6 @@ namespace appsvc_function_dev_cm_stats_dotnet001
                             Dimensions = { dimensions },
                             DimensionFilter = filter
                         };
-
-
-                        
-
-
-
 
                         stopwatch.Start();
                         reportResponse = analyticsDataClient.RunReport(reportRequest);
