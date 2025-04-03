@@ -189,7 +189,6 @@ namespace appsvc_function_dev_cm_stats_dotnet001
 
             foreach (var k in sortedDict)
             {
-
                 if (FoundCount == 10) break;
 
                 TopTenWithSkills topTen = new TopTenWithSkills();
@@ -197,11 +196,10 @@ namespace appsvc_function_dev_cm_stats_dotnet001
 
                 try
                 {
-
                     var item = await client.Sites[config.SiteId].Lists[config.ListId].Items[k.Key].GetAsync((requestConfiguration) =>
                     {
                         requestConfiguration.Headers.Add("ConsistencyLevel", "eventual");
-                        requestConfiguration.QueryParameters.Expand = new string[] { "fields($select=JobTitleEn,JobTitleFr,Skills,Skills_x003a__x0020_NameFr)" };
+                        requestConfiguration.QueryParameters.Expand = new string[] { $"fields($select=JobTitleEn,JobTitleFr,Skills,{config.SkillsNameFr})" };
                     });
 
                     FoundCount += 1;
@@ -225,7 +223,7 @@ namespace appsvc_function_dev_cm_stats_dotnet001
                         topTen.SkillsEn.Add(lookup.LookupValue.ToString());
                     }
 
-                    skills = (UntypedArray)item.Fields.AdditionalData["Skills_x003a__x0020_NameFr"];
+                    skills = (UntypedArray)item.Fields.AdditionalData[config.SkillsNameFr];
                     skillsArray = skills.GetValue().ToArray();
                     Skills = new();
 

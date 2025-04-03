@@ -24,7 +24,7 @@ namespace appsvc_function_dev_cm_stats_dotnet001
             try
             {
                 Config config = new Config();
-                await new ReportingApi().GenerateReport(config.PropertyId, _logger);
+                await new ReportingApi(_logger).GenerateReport(config.PropertyId);
             }
             catch (Exception ex)
             {

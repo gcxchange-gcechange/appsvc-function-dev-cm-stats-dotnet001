@@ -29,20 +29,31 @@ n/a
 
 ## App setting
 
-| Name                    | Description                                                                    |
-| ----------------------- | ------------------------------------------------------------------------------ |
-| AzureWebJobsStorage     | Connection string for the storage acoount                                      |
-| clientId                | Id of the app registration used to authenticate user                           |
-| containerName           | The name of the storage container that contains the GA data                    |
-| delegatedUserName       | Name of the user for delegated access                                          |
-| delegatedUserSecret     | Name of the secret for delegated access                                        |
-| keyFileName             | Name of the file that contains Google Analytics credentials                    |
-| keyVaultUrl             | Address of the key vault                                                       |
-| listId                  | Id of the job opportunity list                                                 |
-| propertyId              | Id of the Google Analytics property                                            |
-| secretName              | Name of the secret used for authentication                                     |
-| siteId                  | Id of the site that hosts the job opportunity list                             |
-| tenantId                | Id of the SharePoint tenant                                                    |
+| Name                        | Description                                                                    |
+| --------------------------- | ------------------------------------------------------------------------------ |
+| AzureWebJobsStorage         | Connection string for the storage acoount                                      |
+| clientId                    | Id of the app registration used to authenticate user                           |
+| containerName               | The name of the storage container that contains the GA data                    |
+| delegatedUserName           | Name of the user for delegated access                                          |
+| delegatedUserSecret         | Name of the secret for delegated access                                        |
+| keyVaultUrl                 | Address of the key vault                                                       |
+| listId                      | Id of the job opportunity list                                                 |
+| privateKeySecretName        | Name of the secret used to store the private api key for Google                |
+| propertyId                  | Id of the Google Analytics property                                            |
+| secretName                  | Name of the secret used for authentication                                     |
+| siteId                      | Id of the site that hosts the job opportunity list                             |
+| skillsNameFr                | Name of the column for skills name French (use as required)                    |
+| tenantId                    | Id of the SharePoint tenant                                                    |
+| type                        | Credential for Google Analytics client                                         |
+| project_id                  | Credential for Google Analytics client                                         |
+| private_key_id              | Credential for Google Analytics client                                         |
+| client_email                | Credential for Google Analytics client                                         |
+| client_id                   | Credential for Google Analytics client                                         |
+| auth_uri                    | Credential for Google Analytics client                                         |
+| token_uri                   | Credential for Google Analytics client                                         |
+| auth_provider_x509_cert_url | Credential for Google Analytics client                                         |
+| client_x509_cert_url        | Credential for Google Analytics client                                         |
+| universe_domain             | Credential for Google Analytics client                                         |
 
 ## Version history
 
