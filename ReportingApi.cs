@@ -114,22 +114,11 @@ namespace appsvc_function_dev_cm_stats_dotnet001
             var startDate = DateTime.Now.AddDays(-numberOfDays);
             var endDate = numberOfDays == 0 ? DateTime.Now : DateTime.Now.AddDays(-1);
 
-            //Use start and end date from config if specified else keep the existing values
-
-            //if (reportStartDate != DateTime.MinValue && reportEndDate != DateTime.MinValue && reportStartDate <= reportEndDate)
-            //{
-            //    startDate = reportStartDate;
-            //    endDate = reportEndDate;
-            //}
-
-            if (reportStartDate != DateTime.MinValue)
+            if (reportStartDate != DateTime.MinValue && reportEndDate != DateTime.MinValue && reportStartDate <= reportEndDate)
+            {
                 startDate = reportStartDate;
-
-            if (reportEndDate != DateTime.MinValue)
                 endDate = reportEndDate;
-
-            // endDate hard-coded to current date for now
-            endDate = DateTime.Now;
+            }
 
             return new DateRange
             {
@@ -142,7 +131,7 @@ namespace appsvc_function_dev_cm_stats_dotnet001
         /// Get all reports configured in App.config
         /// </summary>
         /// <returns></returns>
-        public async Task GenerateReport(string propertyId) //, ILogger logger
+        public async Task GenerateReport(string propertyId)
         {
             var reportResponse = new RunReportResponse();
 
@@ -177,7 +166,7 @@ namespace appsvc_function_dev_cm_stats_dotnet001
                         var reportRequest = new RunReportRequest
                         {
                             Property = "properties/" + propertyId,
-                            DateRanges = { GetDateRangeFromConfiguration(config) },
+                            DateRanges = { homeHomeOnTheRange },
                             Metrics = { metrics },
                             Dimensions = { dimensions },
                             DimensionFilter = filter
