@@ -286,8 +286,6 @@ namespace appsvc_function_dev_cm_stats_dotnet001
                         clickEvent.JobTitleFr = item.Fields.AdditionalData["JobTitleFr"].ToString();
 
                         logger.LogWarning($"clickEvent.JobTitleEn: {clickEvent.JobTitleEn}");
-
-
                     }
                     catch (Exception e)
                     {
