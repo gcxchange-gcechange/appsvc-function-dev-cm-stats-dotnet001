@@ -114,6 +114,20 @@ namespace appsvc_function_dev_cm_stats_dotnet001
             var startDate = DateTime.Now.AddDays(-numberOfDays);
             var endDate = numberOfDays == 0 ? DateTime.Now : DateTime.Now.AddDays(-1);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             if (reportStartDate != DateTime.MinValue && reportEndDate != DateTime.MinValue && reportStartDate <= reportEndDate)
             {
                 startDate = reportStartDate;

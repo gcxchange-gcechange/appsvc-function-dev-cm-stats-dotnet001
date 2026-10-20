@@ -13,7 +13,7 @@ namespace appsvc_function_dev_cm_stats_dotnet001
         }
 
         [Function("StoreAnalyticsData")]
-        public async Task Run([TimerTrigger("0 6 * * 0")] TimerInfo myTimer)
+        public async Task Run([TimerTrigger("0 0 6 * * *")] TimerInfo myTimer)  // run daily at 6 AM
         {
             _logger.LogInformation("StoreAnalyticsData received a request.");
 
