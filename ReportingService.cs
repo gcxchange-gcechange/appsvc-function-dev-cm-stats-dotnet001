@@ -116,8 +116,8 @@ namespace appsvc_function_dev_cm_stats_dotnet001
 
                     await SaveToBlob(json, config.AzureWebJobsStorage, config.ContainerName, GetFileName(reportName), logger);
 
-                    json = GetPopularSkills(ClickEvents, logger).Result;
-                    await SaveToBlob(json, config.AzureWebJobsStorage, config.ContainerName, GetFileName(string.Concat(reportName, "_Skills")), logger);
+                    //json = GetPopularSkills(ClickEvents, logger).Result;
+                    //await SaveToBlob(json, config.AzureWebJobsStorage, config.ContainerName, GetFileName(string.Concat(reportName, "_Skills")), logger);
 
                     logger.LogInformation("Finished saving extract file to storage container");
                 }
@@ -126,128 +126,6 @@ namespace appsvc_function_dev_cm_stats_dotnet001
             {
                 logger.LogError("Error in generating extract file: " + ex);
             }
-        }
-
-        private class EventStuff
-        {
-            public string EventName;
-            public List<TopTenWithSkills> topTenList;
-
-            public EventStuff()
-            {
-                topTenList = new();
-            }
-        }
-
-        private class TopTenWithSkills
-        {
-            public string JobTitleEn;
-            public string JobTitleFr;
-            public int ClickCount;
-            public List<string> SkillsEn;
-            public List<string> SkillsFr;
-
-            public TopTenWithSkills ()
-            {
-                SkillsEn = new List<string> ();
-                SkillsFr = new List<string>();
-            }
-        }
-
-        private class LookUp
-        {
-            public string LookupId;
-            public string LookupValue;
-        }
-
-        private async Task<string> GetPopularSkills(List<Event> ClickEvents, ILogger logger)
-        {
-            Dictionary<string, int> clickTotal = new();
-            int count;
-            int itemId;
-            bool result;
-            GraphServiceClient client = Auth.GetClient(logger);
-            Config config = new Config();
-
-            EventStuff eventStuff = new EventStuff();
-
-            foreach (var clickEvent in ClickEvents) {
-                result = int.TryParse(clickEvent.JobOpportunityId, out itemId);
-
-                if (result) {
-                    if (clickTotal.TryGetValue(clickEvent.JobOpportunityId, out count))
-                        clickTotal[clickEvent.JobOpportunityId] = count + int.Parse(clickEvent.EventCount);
-                    else
-                        clickTotal.Add(clickEvent.JobOpportunityId, int.Parse(clickEvent.EventCount));
-                }
-
-                eventStuff.EventName = clickEvent.EventName;
-            }
-
-            int FoundCount = 0;
-            var sortedDict = (from entry in clickTotal orderby entry.Value descending select entry); //.Take(10);
-
-            foreach (var k in sortedDict)
-            {
-                if (FoundCount == 10) break;
-
-                TopTenWithSkills topTen = new TopTenWithSkills();
-                topTen.ClickCount = k.Value;
-
-                try
-                {
-                    var item = await client.Sites[config.SiteId].Lists[config.ListId].Items[k.Key].GetAsync((requestConfiguration) =>
-                    {
-                        requestConfiguration.Headers.Add("ConsistencyLevel", "eventual");
-                        requestConfiguration.QueryParameters.Expand = new string[] { $"fields($select=JobTitleEn,JobTitleFr,Skills,{config.SkillsNameFr})" };
-                    });
-
-                    FoundCount += 1;
-
-                    topTen.JobTitleEn = item.Fields.AdditionalData["JobTitleEn"].ToString();
-                    topTen.JobTitleFr = item.Fields.AdditionalData["JobTitleFr"].ToString();
-
-                    var skills = (UntypedArray)item.Fields.AdditionalData["Skills"];
-                    var skillsArray = skills.GetValue().ToArray();
-                    List<LookUp> Skills = new();
-
-                    for (int i = 0; i < skillsArray.Length; i++)
-                    {
-                        var serializedString = KiotaJsonSerializer.SerializeAsStringAsync(skillsArray[i]);
-                        var obj = JsonConvert.DeserializeObject<dynamic>(serializedString.Result);
-                        Skills.Add(obj.ToObject<LookUp>());
-                    }
-
-                    foreach (var lookup in Skills)
-                    {
-                        topTen.SkillsEn.Add(lookup.LookupValue.ToString());
-                    }
-
-                    skills = (UntypedArray)item.Fields.AdditionalData[config.SkillsNameFr];
-                    skillsArray = skills.GetValue().ToArray();
-                    Skills = new();
-
-                    for (int i = 0; i < skillsArray.Length; i++)
-                    {
-                        var serializedString = KiotaJsonSerializer.SerializeAsStringAsync(skillsArray[i]);
-                        var obj = JsonConvert.DeserializeObject<dynamic>(serializedString.Result);
-                        Skills.Add(obj.ToObject<LookUp>());
-                    }
-
-                    foreach (var lookup in Skills)
-                    {
-                        topTen.SkillsFr.Add(lookup.LookupValue.ToString());
-                    }
-
-                    eventStuff.topTenList.Add(topTen);
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError($"Exception: {ex.Message} ID: {k.Key}");
-                }
-            }
-
-            return JsonConvert.SerializeObject(eventStuff);
         }
 
         private async Task<string> GetEventDetails(List<Event> ClickEvents, ILogger logger)
