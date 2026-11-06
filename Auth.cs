@@ -47,7 +47,7 @@ namespace appsvc_function_dev_cm_stats_dotnet001
                             Mode = RetryMode.Exponential
                         }
                     };
-                    var client = new SecretClient(new Uri(config.KeyVaultUrl), new DefaultAzureCredential(), options);
+                    var client = new SecretClient(new Uri(config.KeyVaultUrl), new Azure.Identity.DefaultAzureCredential(), options);
 
                     KeyVaultSecret secret = client.GetSecret(config.SecretName);
                     _clientSecret = secret.Value;
