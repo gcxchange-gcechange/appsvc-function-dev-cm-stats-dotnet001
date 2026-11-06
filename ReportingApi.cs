@@ -64,7 +64,7 @@ namespace appsvc_function_dev_cm_stats_dotnet001
                         Mode = RetryMode.Exponential
                     }
                 };
-                var client = new SecretClient(new Uri(config.KeyVaultUrl), new DefaultAzureCredential(), options);
+                var client = new SecretClient(new Uri(config.KeyVaultUrl), new Azure.Identity.DefaultAzureCredential(), options);
 
                 KeyVaultSecret secret = client.GetSecret(config.PrivateKeySecretName);
                 credentials.private_key = secret.Value;
@@ -113,20 +113,6 @@ namespace appsvc_function_dev_cm_stats_dotnet001
             //Set start and end date for report using number of days
             var startDate = DateTime.Now.AddDays(-numberOfDays);
             var endDate = numberOfDays == 0 ? DateTime.Now : DateTime.Now.AddDays(-1);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             if (reportStartDate != DateTime.MinValue && reportEndDate != DateTime.MinValue && reportStartDate <= reportEndDate)
             {
